@@ -341,7 +341,7 @@ function C2DMConnection(config) {
                     var loggedInStatus = (self.currentAuthorizationToken ? "true" :  "false");
                     stream.write("logged_in_to_c2dm: " + loggedInStatus + "\n");
                     if (self.currentAuthorizationToken) {
-                        stream.write("token_age: " + tokenAge + "\n");
+                        stream.write("token_age: " + tokenAge + " seconds\n");
                     }
 
                     var memoryUsage = process.memoryUsage();

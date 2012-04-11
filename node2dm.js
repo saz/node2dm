@@ -4,10 +4,16 @@ var dgram = require('dgram')
   , https = require('https')
   , querystring = require('querystring')
   , emitter = require('events').EventEmitter
-  , config = require('./config')
+  , config = require(userConfig())
   , fs = require('fs')
   , net = require('net')
 
+
+function userConfig() {
+  return process.argv[2] ?
+           process.argv[2].replace(/.js$/, '') :
+           'config'
+}
 
 function C2DMMessage(deviceToken, collapseKey, notification) {
     this.deviceToken = deviceToken;

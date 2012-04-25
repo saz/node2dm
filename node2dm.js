@@ -386,3 +386,4 @@ fs.stat('quota.lock', function(err, stats) {
     var connection = new C2DMConnection(config);
     var receiver = new C2DMReceiver(config, connection);
 });
+

@@ -1,0 +1,72 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          node2dm
+# Required-Start:    networking
+# Required-Stop:     networking
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start the node2dm server.
+### END INIT INFO
+
+NAME='node2dm'
+PATH=/sbin:/usr/sbin:/bin:/usr/local/bin:/usr/bin
+DAEMON='/usr/bin/node2dm'
+CONFIG="/etc/node2dm.conf"
+PIDFILE=/var/run/node2dm.pid
+
+test -x $DAEMON || exit 0
+test -x $NODE || exit 0
+
+if [ ! -e $CONFIG ]; then
+    echo "Configuration file $CONFIG not found. Aborting!"
+	exit 1
+fi
+
+. /lib/lsb/init-functions
+
+set -e
+
+start_node2dm()
+{
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -b -m -- -c $CONFIG
+}
+
+stop_node2dm()
+{
+	start-stop-daemon --stop --pidfile $PIDFILE --quiet --oknodo --retry=TERM/10/KILL/5
+}
+
+status_node2dm()
+{
+    status_of_proc -p $PIDFILE "${DAEMON}" "${NAME}"
+}
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting" "${NAME} "
+        start_node2dm
+        log_end_msg $?
+	;;
+    stop)
+        log_daemon_msg "Stopping" "${NAME} "
+        stop_node2dm
+        log_end_msg $?
+	;;
+
+    restart|force-reload)
+        log_daemon_msg "Restarting" "${NAME} "
+        stop_node2dm
+        start_node2dm
+        log_end_msg $?
+	;;
+
+    status)
+        status_node2dm
+    ;;
+
+    *)
+	    echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
+	    exit 1
+esac
+
+exit 0

@@ -4,10 +4,20 @@ var dgram = require('dgram')
   , https = require('https')
   , querystring = require('querystring')
   , emitter = require('events').EventEmitter
-  , config = require('./config')
   , fs = require('fs')
   , net = require('net')
 
+var nopt = require('nopt')
+  , path = require('path')
+  , knownOpts = { 'config': path }
+  , shortHands = { 'c': ['--config'] }
+  , parsed = nopt(knownOpts, shortHands, process.argv, 2)
+
+if (!parsed.config) {
+    parsed.config = './config';
+}
+
+var config = require(parsed.config)
 
 function C2DMMessage(deviceToken, collapseKey, notification) {
     this.deviceToken = deviceToken;

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var dgram = require('dgram')
   , util = require('util')
   , http = require('http')
@@ -380,3 +382,4 @@ fs.stat('quota.lock', function(err, stats) {
     var connection = new C2DMConnection(config);
     var receiver = new C2DMReceiver(config, connection);
 });
+

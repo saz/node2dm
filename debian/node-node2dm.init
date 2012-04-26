@@ -11,12 +11,14 @@
 NAME='node2dm'
 RUNAS='node2dm'
 PATH=/sbin:/usr/sbin:/bin:/usr/local/bin:/usr/bin
-DAEMON='/usr/bin/node2dm'
+DAEMON='/usr/bin/node2dm.js'
 CONFIG="/etc/node2dm.conf"
 PIDFILE=/var/run/node2dm.pid
 
-test -x $DAEMON || exit 0
-test -x $NODE || exit 0
+if [ ! -x $DAEMON ]; then
+    echo "$DAEMON not executable. Aborting!"
+    exit 1
+fi
 
 if [ ! -e $CONFIG ]; then
     echo "Configuration file $CONFIG not found. Aborting!"

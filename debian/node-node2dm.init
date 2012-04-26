@@ -9,6 +9,7 @@
 ### END INIT INFO
 
 NAME='node2dm'
+RUNAS='node2dm'
 PATH=/sbin:/usr/sbin:/bin:/usr/local/bin:/usr/bin
 DAEMON='/usr/bin/node2dm'
 CONFIG="/etc/node2dm.conf"
@@ -28,12 +29,12 @@ set -e
 
 start_node2dm()
 {
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -b -m -- -c $CONFIG
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --chuid $RUNAS --exec $DAEMON -b -m -- -c $CONFIG
 }
 
 stop_node2dm()
 {
-	start-stop-daemon --stop --pidfile $PIDFILE --quiet --oknodo --retry=TERM/10/KILL/5
+	start-stop-daemon --stop --pidfile $PIDFILE --quiet --oknodo --retry=TERM/10/KILL/5 --user $RUNAS
 }
 
 status_node2dm()

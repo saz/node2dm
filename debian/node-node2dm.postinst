@@ -1,0 +1,21 @@
+#!/bin/sh
+
+case "$1" in
+  configure)
+    if [ -z "`getent group node2dm`" ]; then
+      addgroup --quiet --system node2dm
+    fi
+    if [ -z "`getent passwd node2dm`" ]; then
+      echo -n "Creating user and group node2dm..."
+      adduser --quiet --system --home /var/spool/node2dm --shell /bin/false \
+       --ingroup node2dm --disabled-password --disabled-login \
+       --gecos "Node2DM" node2dm
+      echo "done"
+    fi
+  ;;
+
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac

@@ -1,2 +1,2 @@
 node2dm.js      /usr/lib/nodejs/node2dm/
-node2dm.conf    /etc/
+debian/node2dm.conf    /etc/

@@ -1,3 +1,9 @@
+node2dm (0.1-4ubuntu1) oneiric; urgency=low
+
+  * node2dm should be installed under /usr/bin/
+
+ -- Steffen Zieger <me@saz.sh>  Thu, 26 Apr 2012 18:17:51 +0200
+
 node2dm (0.1-4) stable; urgency=low
 
   * Install node2dm.js to /usr/bin/

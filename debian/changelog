@@ -1,4 +1,4 @@
-node2dm (0.1-4ubuntu1) oneiric; urgency=low
+node2dm (0.1-5) stable; urgency=low
 
   * node2dm should be installed under /usr/bin/
 

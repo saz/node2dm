@@ -13,9 +13,9 @@
  * (if specified, will be used to send a POST back to a service in order to handle bad tokens)
  *
  */
-
-{
-    port: 8120,
-    address: "127.0.0.1"
-}
+ 
+  var config = {}
+  config.port =  8120;
+  config.address= "127.0.0.1";
+  module.exports = config;
 

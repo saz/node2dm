@@ -23,7 +23,7 @@ if (config.syslog) {
 function userConfig() {
   return process.argv[2] ?
            process.argv[2].replace(/.js$/, '') :
-           'config'
+           './config'
 }
 
 function log(msg) {

@@ -6,20 +6,15 @@ var dgram = require('dgram')
   , https = require('https')
   , querystring = require('querystring')
   , emitter = require('events').EventEmitter
+  , config = require(userConfig())
   , fs = require('fs')
   , net = require('net')
 
-var nopt = require('nopt')
-  , path = require('path')
-  , knownOpts = { 'config': path }
-  , shortHands = { 'c': ['--config'] }
-  , parsed = nopt(knownOpts, shortHands, process.argv, 2)
-
-if (!parsed.config) {
-    parsed.config = './config';
+function userConfig() {
+  return process.argv[2] ?
+           process.argv[2].replace(/.js$/, '') :
+           'config'
 }
-
-var config = require(parsed.config)
 
 function C2DMMessage(deviceToken, collapseKey, notification) {
     this.deviceToken = deviceToken;

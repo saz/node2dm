@@ -17,5 +17,6 @@
   var config = {}
   config.port =  8120;
   config.address= "127.0.0.1";
+  config.syslog = false;
   module.exports = config;
 

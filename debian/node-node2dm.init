@@ -31,7 +31,7 @@ set -e
 
 start_node2dm()
 {
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --chuid $RUNAS --exec $DAEMON -b -m -- -c $CONFIG
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --chuid $RUNAS --exec $DAEMON -b -m -- $CONFIG
 }
 
 stop_node2dm()

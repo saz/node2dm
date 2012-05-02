@@ -10,10 +10,28 @@ var dgram = require('dgram')
   , fs = require('fs')
   , net = require('net')
 
+if (config.syslog) {
+    try {
+        var syslog = require('node-syslog');
+        syslog.init('node2dm', syslog.LOG_PID | syslog.LOG_ODELAY, syslog.LOG_DAEMON);
+    } catch (e) {
+        config.syslog = false;
+        log('node-syslog is required for syslog support.');
+    }
+}
+
 function userConfig() {
   return process.argv[2] ?
            process.argv[2].replace(/.js$/, '') :
-           'config'
+           './config'
+}
+
+function log(msg) {
+    if (config.syslog) {
+        syslog.log(syslog.LOG_INFO, msg);
+    } else {
+        util.log(msg);
+    }
 }
 
 function C2DMMessage(deviceToken, collapseKey, notification) {
@@ -28,7 +46,7 @@ function C2DMReceiver(config, connection) {
 
         var msgParts = msg.toString().match(/^([^:]+):([^:]+):(.*)$/);
         if (!msgParts) {
-            util.log("Invalid message");
+            log("Invalid message");
             return;
         };
         var token = msgParts[1];
@@ -39,7 +57,7 @@ function C2DMReceiver(config, connection) {
         connection.notifyDevice(c2dmMessage);
     });
     this.server.bind(config.port || 8120);
-    util.log("server is up");
+    log("server is up");
 }
 
 
@@ -148,12 +166,12 @@ function C2DMConnection(config) {
         totalErrors++;
         var errMessage = err.match(/Error=(.+)$/);
         if (!errMessage) {
-            util.log("Unknown error: " + err);
+            log("Unknown error: " + err);
         }
         var googleError = errMessage[1];
         switch (googleError) {
             case "QuotaExceeded":
-                util.log("WARNING: Google Quota Exceeded");
+                log("WARNING: Google Quota Exceeded");
                 // write a lock file; will require manual intervention
                 fs.open('./quota.lock', 'w', '0666', function(e, id) {
                     fs.write(id, 'locked at ' + new Date().toString(), null, 'utf8', function() {
@@ -177,7 +195,7 @@ function C2DMConnection(config) {
                 break;
 
             case "MessageTooBig":
-                util.log("ERROR: message too big");
+                log("ERROR: message too big");
                 break;
 
         }
@@ -190,7 +208,7 @@ function C2DMConnection(config) {
             return;
         }
         if (self.rateLimitedTokens[message.deviceToken]) {
-            util.log("not sending; this token has been rate limited");
+            log("not sending; this token has been rate limited");
             return;
         }
 
@@ -243,7 +261,7 @@ function C2DMConnection(config) {
 
         postRequest.on('error', function(error) {
             totalErrors++;
-            util.log(error);
+            log(error);
         });
 
         postRequest.write(stringBody);
@@ -268,7 +286,7 @@ function C2DMConnection(config) {
             return;
         }
         if (self.authFails > 10) {
-            util.log("Could not auth after 10 attempts!");
+            log("Could not auth after 10 attempts!");
             process.exit(1);
         }
 
@@ -297,19 +315,19 @@ function C2DMConnection(config) {
                     self.authFails = 0;
                     self.emit('loginComplete');
                 } else {
-                    util.log("Auth fail; body: " + buffer);
+                    log("Auth fail; body: " + buffer);
                     if (buffer.match(/CaptchaToken/)) {
-                        util.log("Must auth with captcha; exiting");
+                        log("Must auth with captcha; exiting");
                         process.exit(1);
                     }
                     self.authFails++;
                 }
-                util.log('auth token: ' + self.currentAuthorizationToken);
+                log('auth token: ' + self.currentAuthorizationToken);
                 authInProgress = false;
             });
         });
         loginReq.on('error', function(e) {
-            util.log(e);
+            log(e);
             authInProgress = false;
         });
         loginReq.write(loginBodyString);
@@ -374,7 +392,7 @@ util.inherits(C2DMConnection, emitter);
 // don't start until removed
 fs.stat('quota.lock', function(err, stats) {
     if (!err) {
-        util.log("Can't start; quota.lock present");
+        log("Can't start; quota.lock present");
         process.exit(1);
     }
 

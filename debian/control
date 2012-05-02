@@ -10,7 +10,7 @@ Vcs-Git: git://github.com/Instagram/node2dm.git
 
 Package: node-node2dm
 Architecture: all
-Depends: ${misc:Depends}, nodejs, node-nopt, node-abbrev
+Depends: ${misc:Depends}, nodejs
 Provides: node2dm
 Description: node.js server for push notifications to Google's C2DM
  Written by Instagram to support our Android application,

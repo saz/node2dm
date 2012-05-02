@@ -342,13 +342,14 @@ function C2DMConnection(config) {
             var command = commandLine.shift();
             switch (command) {
                 case "help":
-                    stream.write("Commands: stats authtoken");
+                    stream.write("Commands: stats authtoken\n");
                     break;
 
                 case "authtoken":
                     if (self.currentAuthorizationToken) {
                         stream.write("token: " + self.currentAuthorizationToken + "\n");
                     }
+                    stream.write("END\n\n");
                     break;
 
                 case "stats":
@@ -373,6 +374,11 @@ function C2DMConnection(config) {
                     for (var property in memoryUsage) {
                         stream.write("memory_" + property + ": " + memoryUsage[property] + "\n");
                     }
+                    stream.write("END\n\n");
+                    break;
+
+                case "quit":
+                    stream.end();
                     break;
 
                 default:

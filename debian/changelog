@@ -1,3 +1,10 @@
+node2dm (0.1-10) stable; urgency=low
+
+  * Set NODE_PATH before starting node2dm
+  * Add config.syslog as variable to config
+
+ -- Steffen Zieger <me@saz.sh>  Wed, 02 May 2012 19:20:07 +0200
+
 node2dm (0.1-9) stable; urgency=low
 
   * New upstream version

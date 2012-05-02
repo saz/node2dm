@@ -31,7 +31,7 @@ set -e
 
 start_node2dm()
 {
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --chuid $RUNAS --exec $DAEMON -b -m -- $CONFIG
+	NODE_PATH='/usr/local/lib/node_modules:' start-stop-daemon --start --quiet --pidfile $PIDFILE --chuid $RUNAS --exec $DAEMON -b -m -- $CONFIG
 }
 
 stop_node2dm()
